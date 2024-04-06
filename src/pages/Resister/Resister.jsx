@@ -1,13 +1,30 @@
 import { Link } from "react-router-dom";
 import Navbar from "../Shared/Navbar/Navbar";
+import { useContext } from "react";
+import { AuthContext } from "../../Providers/AuthProviders";
 
 
 const Resister = () => {
+  const {createUser} = useContext(AuthContext)
+
   const handleResister = e =>{
     e.preventDefault();
     console.log(e.currentTarget)
     const form = new FormData(e.currentTarget)
-    console.log(form.get('password'))
+    const name = form.get('name')
+    const photo = form.get('photo')
+    const email = form.get('email')
+    const password = form.get('password')
+    console.log(name,photo,email,password)
+
+    // create User
+    createUser(email,password)
+    .then(result =>{
+      console.log(result.user)
+    })
+    .catch(error =>{
+      console.error(error)
+    })
    }  
   return (
     <div>
@@ -16,18 +33,6 @@ const Resister = () => {
         <h2 className="text-3xl text-center my-10">Please Resister</h2>
 
         <form onSubmit={handleResister} className="md:w-3/4 lg:w-1/2 mx-auto">
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text">Email</span>
-            </label>
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              className="input input-bordered"
-              required
-            />
-          </div>
           <div className="form-control">
             <label className="label">
               <span className="label-text">Name</span>
@@ -48,6 +53,18 @@ const Resister = () => {
               type="text"
               name="photo"
               placeholder="Photo URL"
+              className="input input-bordered"
+              required
+            />
+          </div>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Email</span>
+            </label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
               className="input input-bordered"
               required
             />
